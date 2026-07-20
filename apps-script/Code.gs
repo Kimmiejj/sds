@@ -46,7 +46,7 @@ function findExistingStudentRow_(sheet, student) {
 
   const values = sheet.getRange(startRow, 3, rowCount, 5).getDisplayValues();
   const name = normalizeMatchValue_(student.firstName + ' ' + student.lastName);
-  const grade = normalizeMatchValue_(student.gradeLevel);
+  const grade = normalizeGradeValue_(student.gradeLevel);
   const room = normalizeMatchValue_(student.room);
   const studentNumber = normalizeMatchValue_(student.studentNumber);
 
@@ -54,7 +54,7 @@ function findExistingStudentRow_(sheet, student) {
     const row = values[i];
     if (
       normalizeMatchValue_(row[0]) === name &&
-      normalizeMatchValue_(row[2]) === grade &&
+      normalizeGradeValue_(row[2]) === grade &&
       normalizeMatchValue_(row[3]) === room &&
       normalizeMatchValue_(row[4]) === studentNumber
     ) {
@@ -66,6 +66,12 @@ function findExistingStudentRow_(sheet, student) {
 
 function normalizeMatchValue_(value) {
   return String(value || '').trim().replace(/\s+/g, ' ').toLocaleLowerCase();
+}
+
+function normalizeGradeValue_(value) {
+  const text = normalizeMatchValue_(value);
+  const match = text.match(/([1-6])$/);
+  return match ? match[1] : text;
 }
 
 function json_(value) { return ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON); }
