@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>เข็มทิศอาชีพ | RIASEC Thailand</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a href="#home" class="brand" aria-label="เข็มทิศอาชีพ"><span class="brand-mark">✦</span><span>เข็มทิศ<span class="brand-accent">อาชีพ</span></span></a>
+    <nav><a href="#test">แบบประเมิน</a><a href="#codes">รู้จัก RIASEC</a><a href="#careers">อาชีพ</a><a href="#links">แหล่งเรียนต่อ</a></nav>
+    <button class="menu-button" id="menuButton" aria-label="เปิดเมนู">☰</button>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">แนะแนวการศึกษาและอาชีพ · ประเทศไทย</p>
+        <h1>ค้นพบทางที่<br><em>เป็นคุณ</em> จริง ๆ</h1>
+        <p class="hero-text">แบบประเมินความสนใจอาชีพ RIASEC สำหรับนักเรียนไทย พร้อมแนวทางคณะ มหาวิทยาลัย และโลกการทำงานจริง</p>
+        <div class="hero-actions"><a class="button primary" href="#test">เริ่มทำแบบประเมิน <span>→</span></a><a class="button ghost" href="#codes">RIASEC คืออะไร</a></div>
+        <p class="microcopy">ใช้เวลาประมาณ 8–10 นาที · เก็บข้อมูลในเครื่องนี้เท่านั้น</p>
+      </div>
+      <div class="hero-panel" aria-label="ผลลัพธ์ตัวอย่าง RIASEC">
+        <div class="panel-glow"></div><p class="eyebrow">ตัวอย่างผลลัพธ์</p>
+        <div class="code-orbit"><span class="orbit-code code-i">I</span><span class="orbit-code code-a">A</span><span class="orbit-code code-s">S</span><div class="orbit-core"><strong>IAS</strong><small>นักคิดสร้างสรรค์<br>ที่เข้าใจผู้คน</small></div></div>
+        <div class="mini-bars"><div><b>I</b><span><i style="width:88%"></i></span><em>28</em></div><div><b>A</b><span><i style="width:76%"></i></span><em>24</em></div><div><b>S</b><span><i style="width:68%"></i></span><em>21</em></div></div>
+      </div>
+    </section>
+
+    <section class="stats"><div><strong>6</strong><span>บุคลิกภาพ<br>ด้านอาชีพ</span></div><div><strong>36</strong><span>คำถามกระชับ<br>ตอบบนมือถือได้</span></div><div><strong>30+</strong><span>อาชีพที่เชื่อมโยง<br>กับบริบทไทย</span></div></section>
+
+    <section id="codes" class="section codes-section">
+      <div class="section-heading"><p class="eyebrow">HOLLAND CODE · RIASEC</p><h2>ความสนใจของคุณ<br>บอกได้มากกว่าที่คิด</h2><p>กดที่สัญลักษณ์เพื่ออ่านความหมาย บุคลิกภาพ จุดแข็ง และสภาพแวดล้อมการทำงานที่เหมาะกับคุณ</p></div>
+      <div id="codeCards" class="code-grid"></div>
+    </section>
+
+    <section id="test" class="section test-section">
+      <div class="test-intro"><p class="eyebrow">แบบประเมินฉบับดิจิทัล</p><h2>ลองฟังเสียง<br>ความสนใจของตัวเอง</h2><p>คำถามออกแบบตามโครงสร้าง S.D.S. 3 มิติ: กิจกรรม ความสามารถ และอาชีพ เลือก “ใช่” เมื่อข้อความนั้นตรงกับสิ่งที่คุณชอบ สนใจ หรืออยากลอง</p><div class="test-tags"><span>กิจกรรม</span><span>ความสามารถ</span><span>อาชีพ</span></div></div>
+      <div class="quiz-card" id="quizCard">
+        <div id="quizStart"><div class="quiz-icon">⌁</div><h3>พร้อมเริ่มหรือยัง?</h3><p>ตอบตามความรู้สึกของคุณ ไม่มีคำตอบที่ถูกหรือผิด</p><button class="button primary" id="startQuiz">เริ่มแบบประเมิน <span>→</span></button></div>
+        <form id="quizForm" hidden>
+          <div class="quiz-top"><span id="questionType">กิจกรรม</span><span id="progressLabel">1 / 36</span></div><div class="progress"><i id="progressBar"></i></div>
+          <h3 id="questionText"></h3><p class="question-help">ถ้าข้อความนี้ตรงกับคุณ ให้เลือก “ใช่ / สนใจ”</p>
+          <div class="answer-row"><button type="button" class="answer no" data-answer="0">ไม่ใช่</button><button type="button" class="answer yes" data-answer="1">ใช่ / สนใจ</button></div>
+          <button type="button" class="back-button" id="backQuestion">← ย้อนกลับ</button>
+        </form>
+        <div id="quizResult" hidden></div>
+      </div>
+    </section>
+
+    <section id="careers" class="section career-section">
+      <div class="section-heading row-heading"><div><p class="eyebrow">CAREER EXPLORER</p><h2>อาชีพที่อาจ<br>พาคุณไปไกล</h2></div><p>เลือกดูตามรหัส RIASEC เพื่อรู้หน้าที่ ทักษะ คณะที่เกี่ยวข้อง และลิงก์ค้นหาหลักสูตรในไทย</p></div>
+      <div class="filters" id="careerFilters"></div><div class="career-grid" id="careerGrid"></div>
+    </section>
+
+    <section id="links" class="section link-section">
+      <div class="link-copy"><p class="eyebrow">THAILAND EDUCATION & WORK</p><h2>ก้าวต่อไป<br>เริ่มจากข้อมูลดี ๆ</h2><p>ช่องทางหลักสำหรับค้นหาหลักสูตร การรับสมัคร และสำรวจตลาดแรงงานในประเทศไทย</p></div>
+      <div class="link-list" id="linkList"></div>
+    </section>
+
+    <section class="privacy"><div class="privacy-icon">⌁</div><div><strong>ข้อมูลของนักเรียนเป็นของนักเรียน</strong><p>ต้นแบบนี้บันทึกคำตอบไว้เฉพาะเบราว์เซอร์เครื่องที่ใช้ สามารถส่งออก CSV เพื่อเปิดด้วย Excel หรือส่งให้ครูแนะแนวได้เมื่อเจ้าของข้อมูลยินยอม</p></div></section>
+  </main>
+  <footer><span>เข็มทิศอาชีพ · RIASEC Thailand</span><span>เพื่อการสำรวจตนเอง ไม่ใช่การตัดสินอนาคต</span></footer>
+  <dialog id="detailDialog"><button class="dialog-close" id="closeDialog" aria-label="ปิด">×</button><div id="dialogContent"></div></dialog>
+  <script src="app.js"></script>
+</body>
+</html>
