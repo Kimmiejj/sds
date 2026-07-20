@@ -1,0 +1,29 @@
+const SPREADSHEET_ID = '1955ghvAH8XdYs2Q356-YQhFdt4_0LoS0jTbnfaXswF8';
+const ANSWERS_SHEET = 'คำตอบนักเรียน';
+const QUESTIONS_SHEET = 'คำถาม RIASEC';
+
+function doGet(e) {
+  if (e.parameter.action !== 'questions') return json_({ ok: true, service: 'SDS RIASEC' });
+  const rows = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(QUESTIONS_SHEET).getRange('A2:F217').getValues();
+  const questions = rows.map(function (r) { return { id: r[0], type: r[1], code: r[2], text: r[3], positive: r[4], negative: r[5] }; });
+  return json_({ ok: true, questions: questions });
+}
+
+function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    const student = data.student || {};
+    if (!student.firstName || !student.lastName || !student.gradeLevel || !student.room || !student.studentNumber || !student.consent) throw new Error('ข้อมูลนักเรียนไม่ครบ');
+    if (!Array.isArray(data.answers) || data.answers.length !== 216) throw new Error('คำตอบต้องครบ 216 ข้อ');
+    const answers = data.answers.map(function (v) { return Number(v) === 1 ? 1 : 0; });
+    const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(ANSWERS_SHEET);
+    const row = Math.max(3, sheet.getLastRow() + 1);
+    sheet.getRange(row, 1, 1, 7).setValues([[Utilities.getUuid(), new Date(), student.firstName + ' ' + student.lastName, student.nickName || '', student.room, student.studentNumber, 'ยินยอม']]);
+    sheet.getRange(row, 8, 1, 216).setValues([answers]);
+    sheet.getRange(row, 232, 1, 3).setValues([[student.firstName, student.lastName, student.gradeLevel]]);
+    SpreadsheetApp.flush();
+    return json_({ ok: true, row: row });
+  } catch (error) { return json_({ ok: false, error: error.message }); }
+}
+
+function json_(value) { return ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON); }
