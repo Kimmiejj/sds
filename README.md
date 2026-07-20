@@ -36,3 +36,4 @@ window.SDS_CONFIG = { apiUrl: "วาง_URL_ที่นี่" };
 
 
 https://kimmiejj.github.io/sds/
+https://docs.google.com/spreadsheets/d/1955ghvAH8XdYs2Q356-YQhFdt4_0LoS0jTbnfaXswF8/edit?usp=drive_link
