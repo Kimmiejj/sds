@@ -18,9 +18,9 @@ function doPost(e) {
     const answers = data.answers.map(function (v) { return Number(v) === 1 ? 1 : 0; });
     const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(ANSWERS_SHEET);
     const row = nextStudentRow_(sheet);
-    sheet.getRange(row, 1, 1, 7).setValues([[Utilities.getUuid(), new Date(), student.firstName + ' ' + student.lastName, student.nickName || '', student.room, student.studentNumber, 'ยินยอม']]);
+    sheet.getRange(row, 1, 1, 7).setValues([[Utilities.getUuid(), new Date(), student.firstName + ' ' + student.lastName, student.nickName || '', student.gradeLevel, student.room, student.studentNumber]]);
     sheet.getRange(row, 8, 1, 216).setValues([answers]);
-    sheet.getRange(row, 232, 1, 3).setValues([[student.firstName, student.lastName, student.gradeLevel]]);
+    sheet.getRange(row, 232, 1, 3).setValues([[student.firstName, student.lastName, 'ยินยอม']]);
     SpreadsheetApp.flush();
     return json_({ ok: true, row: row });
   } catch (error) { return json_({ ok: false, error: error.message }); }
