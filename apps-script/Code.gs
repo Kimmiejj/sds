@@ -11,7 +11,7 @@ function doGet(e) {
 
 function doPost(e) {
   try {
-    const data = JSON.parse(e.postData.contents);
+    const data = JSON.parse((e.parameter && e.parameter.payload) || e.postData.contents);
     const student = data.student || {};
     if (!student.firstName || !student.lastName || !student.gradeLevel || !student.room || !student.studentNumber || !student.consent) throw new Error('ข้อมูลนักเรียนไม่ครบ');
     if (!Array.isArray(data.answers) || data.answers.length !== 216) throw new Error('คำตอบต้องครบ 216 ข้อ');
