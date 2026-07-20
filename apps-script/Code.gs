@@ -14,7 +14,11 @@ function doGet(e) {
 }
 
 function doPost(e) {
+  const lock = LockService.getScriptLock();
+  let locked = false;
   try {
+    lock.waitLock(30000);
+    locked = true;
     const data = JSON.parse((e.parameter && e.parameter.payload) || e.postData.contents);
     const student = data.student || {};
     if (!student.firstName || !student.lastName || !student.gradeLevel || !student.room || !student.studentNumber || !student.consent) throw new Error('ข้อมูลนักเรียนไม่ครบ');
@@ -34,6 +38,7 @@ function doPost(e) {
     SpreadsheetApp.flush();
     return json_({ ok: true, row: row });
   } catch (error) { return json_({ ok: false, error: error.message }); }
+  finally { if (locked) lock.releaseLock(); }
 }
 
 function ensureOccupationHeaders_(sheet) {
