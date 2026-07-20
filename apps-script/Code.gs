@@ -3,6 +3,8 @@ const ANSWERS_SHEET = 'คำตอบนักเรียน';
 const QUESTIONS_SHEET = 'คำถาม RIASEC';
 const OCCUPATION_START_COLUMN = 235;
 const OCCUPATION_HEADERS = ['อาชีพที่ 1 (ล่าสุด)', 'อาชีพที่ 2', 'อาชีพที่ 3', 'อาชีพที่ 4', 'อาชีพที่ 5 (เก่าที่สุด)'];
+const MATCH_START_COLUMN = 240;
+const MATCH_HEADERS = ['อาชีพที่ 1 พบอาชีพในระบบ', 'อาชีพที่ 2 พบอาชีพในระบบ', 'อาชีพที่ 3 พบอาชีพในระบบ', 'อาชีพที่ 4 พบอาชีพในระบบ', 'อาชีพที่ 5 พบอาชีพในระบบ'];
 
 function doGet(e) {
   if (e.parameter.action !== 'questions') return json_({ ok: true, service: 'SDS RIASEC' });
@@ -27,6 +29,8 @@ function doPost(e) {
     sheet.getRange(row, 232, 1, 3).setValues([[student.firstName, student.lastName, 'ยินยอม']]);
     ensureOccupationHeaders_(sheet);
     sheet.getRange(row, OCCUPATION_START_COLUMN, 1, 5).setValues([student.occupations.map(function (value) { return String(value).trim(); })]);
+    ensureMatchHeaders_(sheet);
+    sheet.getRange(row, MATCH_START_COLUMN, 1, 5).setValues([occupationMatchValues_(data.occupationMatches)]);
     SpreadsheetApp.flush();
     return json_({ ok: true, row: row });
   } catch (error) { return json_({ ok: false, error: error.message }); }
@@ -37,6 +41,26 @@ function ensureOccupationHeaders_(sheet) {
   if (sheet.getMaxColumns() < requiredColumns) sheet.insertColumnsAfter(sheet.getMaxColumns(), requiredColumns - sheet.getMaxColumns());
   const headers = sheet.getRange(2, OCCUPATION_START_COLUMN, 1, OCCUPATION_HEADERS.length).getDisplayValues()[0];
   if (headers.some(function (value) { return value === ''; })) sheet.getRange(2, OCCUPATION_START_COLUMN, 1, OCCUPATION_HEADERS.length).setValues([OCCUPATION_HEADERS]);
+}
+
+function ensureMatchHeaders_(sheet) {
+  const requiredColumns = MATCH_START_COLUMN + MATCH_HEADERS.length - 1;
+  if (sheet.getMaxColumns() < requiredColumns) sheet.insertColumnsAfter(sheet.getMaxColumns(), requiredColumns - sheet.getMaxColumns());
+  const headers = sheet.getRange(2, MATCH_START_COLUMN, 1, MATCH_HEADERS.length).getDisplayValues()[0];
+  if (headers.some(function (value) { return value === ''; })) sheet.getRange(2, MATCH_START_COLUMN, 1, MATCH_HEADERS.length).setValues([MATCH_HEADERS]);
+}
+
+function occupationMatchValues_(groups) {
+  return MATCH_HEADERS.map(function (_, index) {
+    const group = Array.isArray(groups) ? groups[index] : null;
+    const matches = group && Array.isArray(group.matches) ? group.matches : [];
+    if (!matches.length) return 'ไม่พบอาชีพที่ตรงหรือใกล้เคียง';
+    return matches.map(function (match) {
+      const name = String((match && match.name) || '').trim();
+      const type = String((match && match.type) || 'ใกล้เคียงกับ').trim();
+      return name ? type + ': ' + name : '';
+    }).filter(Boolean).join(' | ');
+  });
 }
 
 function findExistingStudentRow_(sheet, student) {
