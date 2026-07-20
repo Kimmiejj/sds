@@ -31,8 +31,8 @@ function json_(value) { return ContentService.createTextOutput(JSON.stringify(va
 // ไม่ใช้ getLastRow() เพราะสูตร ARRAYFORMULA ในคอลัมน์คะแนนขยายลงมาทั้งชีต
 function nextStudentRow_(sheet) {
   const values = sheet.getRange(3, 3, sheet.getMaxRows() - 2, 1).getDisplayValues();
-  for (let i = values.length - 1; i >= 0; i--) {
-    if (values[i][0] !== '') return i + 4;
+  for (let i = 0; i < values.length; i++) {
+    if (values[i][0] === '') return i + 3;
   }
-  return 3;
+  return sheet.getMaxRows() + 1;
 }
