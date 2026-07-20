@@ -35,4 +35,4 @@ window.SDS_CONFIG = { apiUrl: "วาง_URL_ที่นี่" };
 ผล RIASEC ใช้เพื่อสำรวจความสนใจทางการศึกษาและอาชีพ ไม่ใช่การตัดสินความสามารถหรืออนาคตของนักเรียน
 
 
-https://kimmiejj.github.io/sds/#careers
+https://kimmiejj.github.io/sds/
