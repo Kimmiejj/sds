@@ -20,7 +20,8 @@ function doPost(e) {
     if (!Array.isArray(data.answers) || data.answers.length !== 216) throw new Error('คำตอบต้องครบ 216 ข้อ');
     const answers = data.answers.map(function (v) { return Number(v) === 1 ? 1 : 0; });
     const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(ANSWERS_SHEET);
-    const row = nextStudentRow_(sheet);
+    // ใช้แถวเดิมเมื่อเป็นนักเรียนคนเดิม เพื่อไม่ให้ข้อมูลซ้ำและให้ผลล่าสุดแทนผลเก่า
+    const row = findExistingStudentRow_(sheet, student) || nextStudentRow_(sheet);
     sheet.getRange(row, 1, 1, 7).setValues([[Utilities.getUuid(), new Date(), student.firstName + ' ' + student.lastName, student.nickName || '', student.gradeLevel, student.room, student.studentNumber]]);
     sheet.getRange(row, 8, 1, 216).setValues([answers]);
     sheet.getRange(row, 232, 1, 3).setValues([[student.firstName, student.lastName, 'ยินยอม']]);
@@ -36,6 +37,35 @@ function ensureOccupationHeaders_(sheet) {
   if (sheet.getMaxColumns() < requiredColumns) sheet.insertColumnsAfter(sheet.getMaxColumns(), requiredColumns - sheet.getMaxColumns());
   const headers = sheet.getRange(2, OCCUPATION_START_COLUMN, 1, OCCUPATION_HEADERS.length).getDisplayValues()[0];
   if (headers.some(function (value) { return value === ''; })) sheet.getRange(2, OCCUPATION_START_COLUMN, 1, OCCUPATION_HEADERS.length).setValues([OCCUPATION_HEADERS]);
+}
+
+function findExistingStudentRow_(sheet, student) {
+  const startRow = 3;
+  const rowCount = sheet.getMaxRows() - startRow + 1;
+  if (rowCount <= 0) return 0;
+
+  const values = sheet.getRange(startRow, 3, rowCount, 5).getDisplayValues();
+  const name = normalizeMatchValue_(student.firstName + ' ' + student.lastName);
+  const grade = normalizeMatchValue_(student.gradeLevel);
+  const room = normalizeMatchValue_(student.room);
+  const studentNumber = normalizeMatchValue_(student.studentNumber);
+
+  for (let i = 0; i < values.length; i++) {
+    const row = values[i];
+    if (
+      normalizeMatchValue_(row[0]) === name &&
+      normalizeMatchValue_(row[2]) === grade &&
+      normalizeMatchValue_(row[3]) === room &&
+      normalizeMatchValue_(row[4]) === studentNumber
+    ) {
+      return startRow + i;
+    }
+  }
+  return 0;
+}
+
+function normalizeMatchValue_(value) {
+  return String(value || '').trim().replace(/\s+/g, ' ').toLocaleLowerCase();
 }
 
 function json_(value) { return ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON); }
