@@ -17,7 +17,7 @@ function doPost(e) {
     if (!Array.isArray(data.answers) || data.answers.length !== 216) throw new Error('คำตอบต้องครบ 216 ข้อ');
     const answers = data.answers.map(function (v) { return Number(v) === 1 ? 1 : 0; });
     const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(ANSWERS_SHEET);
-    const row = Math.max(3, sheet.getLastRow() + 1);
+    const row = nextStudentRow_(sheet);
     sheet.getRange(row, 1, 1, 7).setValues([[Utilities.getUuid(), new Date(), student.firstName + ' ' + student.lastName, student.nickName || '', student.room, student.studentNumber, 'ยินยอม']]);
     sheet.getRange(row, 8, 1, 216).setValues([answers]);
     sheet.getRange(row, 232, 1, 3).setValues([[student.firstName, student.lastName, student.gradeLevel]]);
@@ -27,3 +27,12 @@ function doPost(e) {
 }
 
 function json_(value) { return ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON); }
+
+// ไม่ใช้ getLastRow() เพราะสูตร ARRAYFORMULA ในคอลัมน์คะแนนขยายลงมาทั้งชีต
+function nextStudentRow_(sheet) {
+  const values = sheet.getRange(3, 3, sheet.getMaxRows() - 2, 1).getDisplayValues();
+  for (let i = values.length - 1; i >= 0; i--) {
+    if (values[i][0] !== '') return i + 4;
+  }
+  return 3;
+}
