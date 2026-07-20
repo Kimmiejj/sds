@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="student-form.css" />
 </head>
 <body>
   <header class="topbar">
@@ -23,7 +24,7 @@
         <h1>ค้นพบทางที่<br><em>เป็นคุณ</em> จริง ๆ</h1>
         <p class="hero-text">แบบประเมินความสนใจอาชีพ RIASEC สำหรับนักเรียนไทย พร้อมแนวทางคณะ มหาวิทยาลัย และโลกการทำงานจริง</p>
         <div class="hero-actions"><a class="button primary" href="#test">เริ่มทำแบบประเมิน <span>→</span></a><a class="button ghost" href="#codes">RIASEC คืออะไร</a></div>
-        <p class="microcopy">ใช้เวลาประมาณ 8–10 นาที · เก็บข้อมูลในเครื่องนี้เท่านั้น</p>
+        <p class="microcopy">คำถาม S.D.S. ครบ 216 ข้อ · บันทึกผลลง Google Sheet ของโรงเรียนเมื่อยินยอม</p>
       </div>
       <div class="hero-panel" aria-label="ผลลัพธ์ตัวอย่าง RIASEC">
         <div class="panel-glow"></div><p class="eyebrow">ตัวอย่างผลลัพธ์</p>
@@ -32,7 +33,7 @@
       </div>
     </section>
 
-    <section class="stats"><div><strong>6</strong><span>บุคลิกภาพ<br>ด้านอาชีพ</span></div><div><strong>36</strong><span>คำถามกระชับ<br>ตอบบนมือถือได้</span></div><div><strong>30+</strong><span>อาชีพที่เชื่อมโยง<br>กับบริบทไทย</span></div></section>
+    <section class="stats"><div><strong>6</strong><span>บุคลิกภาพ<br>ด้านอาชีพ</span></div><div><strong>216</strong><span>คำถาม S.D.S.<br>ตอบบนมือถือได้</span></div><div><strong>30+</strong><span>อาชีพที่เชื่อมโยง<br>กับบริบทไทย</span></div></section>
 
     <section id="codes" class="section codes-section">
       <div class="section-heading"><p class="eyebrow">HOLLAND CODE · RIASEC</p><h2>ความสนใจของคุณ<br>บอกได้มากกว่าที่คิด</h2><p>กดที่สัญลักษณ์เพื่ออ่านความหมาย บุคลิกภาพ จุดแข็ง และสภาพแวดล้อมการทำงานที่เหมาะกับคุณ</p></div>
@@ -42,11 +43,11 @@
     <section id="test" class="section test-section">
       <div class="test-intro"><p class="eyebrow">แบบประเมินฉบับดิจิทัล</p><h2>ลองฟังเสียง<br>ความสนใจของตัวเอง</h2><p>คำถามออกแบบตามโครงสร้าง S.D.S. 3 มิติ: กิจกรรม ความสามารถ และอาชีพ เลือก “ใช่” เมื่อข้อความนั้นตรงกับสิ่งที่คุณชอบ สนใจ หรืออยากลอง</p><div class="test-tags"><span>กิจกรรม</span><span>ความสามารถ</span><span>อาชีพ</span></div></div>
       <div class="quiz-card" id="quizCard">
-        <div id="quizStart"><div class="quiz-icon">⌁</div><h3>พร้อมเริ่มหรือยัง?</h3><p>ตอบตามความรู้สึกของคุณ ไม่มีคำตอบที่ถูกหรือผิด</p><button class="button primary" id="startQuiz">เริ่มแบบประเมิน <span>→</span></button></div>
+        <div id="quizStart"><div class="quiz-icon">⌁</div><h3>เริ่มทำแบบประเมิน</h3><p>กรอกข้อมูลเพื่อส่งผลให้ครูแนะแนว แล้วตอบตามความรู้สึกของคุณ ไม่มีคำตอบที่ถูกหรือผิด</p><div class="student-form" id="studentForm"><label>ชื่อจริง<input id="firstName" required autocomplete="given-name" /></label><label>นามสกุล<input id="lastName" required autocomplete="family-name" /></label><label>ชื่อเล่น (ถ้ามี)<input id="nickName" /></label><label>ระดับชั้น<input id="gradeLevel" placeholder="เช่น ม.4" required /></label><label>ห้อง<input id="room" placeholder="เช่น 1" required /></label><label>เลขที่<input id="studentNumber" inputmode="numeric" required /></label></div><label class="consent"><input id="consent" type="checkbox" required /> ยินยอมให้บันทึกคำตอบและผลแบบประเมินลงใน Google Sheet ของโรงเรียน</label><p class="form-message" id="formMessage" aria-live="polite"></p><button class="button primary" id="startQuiz">เริ่มแบบประเมิน <span>→</span></button></div>
         <form id="quizForm" hidden>
           <div class="quiz-top"><span id="questionType">กิจกรรม</span><span id="progressLabel">1 / 36</span></div><div class="progress"><i id="progressBar"></i></div>
-          <h3 id="questionText"></h3><p class="question-help">ถ้าข้อความนี้ตรงกับคุณ ให้เลือก “ใช่ / สนใจ”</p>
-          <div class="answer-row"><button type="button" class="answer no" data-answer="0">ไม่ใช่</button><button type="button" class="answer yes" data-answer="1">ใช่ / สนใจ</button></div>
+          <h3 id="questionText"></h3><p class="question-help" id="questionHelp">เลือกคำตอบที่ตรงกับคุณมากที่สุด</p>
+          <div class="answer-row"><button type="button" class="answer no" data-answer="0">ไม่ใช่</button><button type="button" class="answer yes" data-answer="1">ใช่</button></div>
           <button type="button" class="back-button" id="backQuestion">← ย้อนกลับ</button>
         </form>
         <div id="quizResult" hidden></div>
@@ -63,10 +64,11 @@
       <div class="link-list" id="linkList"></div>
     </section>
 
-    <section class="privacy"><div class="privacy-icon">⌁</div><div><strong>ข้อมูลของนักเรียนเป็นของนักเรียน</strong><p>ต้นแบบนี้บันทึกคำตอบไว้เฉพาะเบราว์เซอร์เครื่องที่ใช้ สามารถส่งออก CSV เพื่อเปิดด้วย Excel หรือส่งให้ครูแนะแนวได้เมื่อเจ้าของข้อมูลยินยอม</p></div></section>
+    <section class="privacy"><div class="privacy-icon">⌁</div><div><strong>ข้อมูลของนักเรียนเป็นของนักเรียน</strong><p>ระบบบันทึกชื่อ นามสกุล ระดับชั้น ห้อง เลขที่ คำตอบ และผล RIASEC ลง Google Sheet ของโรงเรียนเมื่อเจ้าของข้อมูลยินยอม พร้อมส่งออก CSV ได้</p></div></section>
   </main>
   <footer><span>เข็มทิศอาชีพ · RIASEC Thailand</span><span>เพื่อการสำรวจตนเอง ไม่ใช่การตัดสินอนาคต</span></footer>
   <dialog id="detailDialog"><button class="dialog-close" id="closeDialog" aria-label="ปิด">×</button><div id="dialogContent"></div></dialog>
+  <script src="config.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
