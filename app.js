@@ -18,31 +18,11 @@ let expandedQuestions=[];
 const resources=[
  ['🎓','MyTCAS · ค้นหาหลักสูตร','ค้นหามหาวิทยาลัย คณะ และหลักสูตร TCAS','https://course.mytcas.com/'],['⌂','ที่ประชุมอธิการบดีแห่งประเทศไทย','ข้อมูลการรับสมัครและระบบ TCAS','https://www.mytcas.com/'],['▤','กระทรวงแรงงาน','ข่าว บริการ และข้อมูลด้านแรงงานไทย','https://www.mol.go.th/'],['↗','กรมการจัดหางาน','บริการหางานและข้อมูลตลาดแรงงาน','https://www.doe.go.th/'],['◉','JobThai','ค้นหางานและฝึกงานในประเทศไทย','https://www.jobthai.com/'],['⌁','JobsDB Thailand','ตำแหน่งงานและคำแนะนำด้านอาชีพ','https://th.jobsdb.com/'],['▦','JOBBKK','ค้นหางานและสร้างเรซูเม่','https://www.jobbkk.com/'],['✦','JobTH','รวมตำแหน่งงานทั่วประเทศไทย','https://www.jobth.com/']
 ];
-const careerAliases={
- 'วิศวกรหุ่นยนต์':['หุ่นยนต์','robot','robotics','เมคคาทรอนิกส์','ระบบอัตโนมัติ'],
- 'นักพัฒนาซอฟต์แวร์':['โปรแกรมเมอร์','programmer','นักเขียนโปรแกรม','developer','software','เขียนโค้ด'],
- 'นักวิเคราะห์ข้อมูล':['data analyst','วิเคราะห์ข้อมูล'],
- 'นักออกแบบ UX/UI':['ux','ui','ออกแบบแอป','ออกแบบเว็บไซต์'],
- 'นักสร้างสรรค์คอนเทนต์':['ครีเอเตอร์','ยูทูบเบอร์','ทำคอนเทนต์','content creator'],
- 'ครู':['อาจารย์','ติวเตอร์','teacher'],
- 'นักจิตวิทยา':['นักบำบัด','ให้คำปรึกษา','จิตแพทย์'],
- 'พยาบาลวิชาชีพ':['พยาบาล','พยาบาลโรงพยาบาล','nurse'],
- 'ผู้ประกอบการ':['นักธุรกิจ','เจ้าของกิจการ','ทำธุรกิจ'],
- 'นักการตลาดดิจิทัล':['นักการตลาด','การตลาด','marketing'],
- 'นักกฎหมาย':['ทนาย','ทนายความ','กฎหมาย','lawyer'],
- 'นักบัญชี':['บัญชี','ทำบัญชี','accountant'],
- 'นักวางแผนการเงิน':['ที่ปรึกษาการเงิน','การเงิน'],
- 'นักโลจิสติกส์':['ขนส่ง','คลังสินค้า','โลจิสติกส์'],
- 'เจ้าหน้าที่ทรัพยากรบุคคล':['hr','ทรัพยากรบุคคล','ฝ่ายบุคคล'],
- 'เกษตรกรอัจฉริยะ':['เกษตรกร','ทำสวน','ทำไร่','เกษตรดิจิทัล'],
- 'ช่างเทคนิคอากาศยาน':['ช่างเครื่องบิน','ช่างอากาศยาน','เครื่องบิน'],
- 'นักท่องเที่ยวเชิงสร้างสรรค์':['ไกด์','มัคคุเทศก์','ท่องเที่ยว']
-};
 let quizIndex=0, answers=[], studentProfile={}, isSubmittingResult=false;
 const $=s=>document.querySelector(s);
 function normalizeCareerText(text){return String(text||'').toLocaleLowerCase('th-TH').replace(/\s+/g,'').replace(/[^\p{L}\p{N}]+/gu,'')}
 function escapeHtml(text){return String(text||'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]))}
-function findCareerMatches(occupations){return occupations.map((occupation,index)=>{const input=normalizeCareerText(occupation);const scoreTerm=(term)=>input===term?100:input.includes(term)&&term.length>=2?75+Math.min(term.length,20):term.includes(input)&&input.length>=2?50+Math.min(input.length,20):0;const matches=careers.map(c=>{const directTerms=[c.name,c.occupationText,...(careerAliases[c.name]||[])].map(normalizeCareerText).filter(Boolean);const relatedTerms=[c.faculty].map(normalizeCareerText).filter(Boolean);const directScore=Math.max(...directTerms.map(scoreTerm),0);const relatedScore=Math.max(...relatedTerms.map(scoreTerm),0);const score=Math.max(directScore,relatedScore);return {career:c,score,type:directScore>=relatedScore?'ตรงกับ':'ใกล้เคียงกับ'}}).filter(x=>x.score>0).sort((a,b)=>b.score-a.score||a.career.id-b.career.id).slice(0,3);return {occupation,index,matches}})}
+function findCareerMatches(occupations){return occupations.map((occupation,index)=>{const input=normalizeCareerText(occupation);const scoreTerm=(term)=>input===term?100:input.includes(term)&&term.length>=2?75+Math.min(term.length,20):term.includes(input)&&input.length>=2?50+Math.min(input.length,20):0;const matches=careers.map(c=>{const directTerms=[c.name,c.occupationText].map(normalizeCareerText).filter(Boolean);const relatedTerms=[c.faculty].map(normalizeCareerText).filter(Boolean);const directScore=Math.max(...directTerms.map(scoreTerm),0);const relatedScore=Math.max(...relatedTerms.map(scoreTerm),0);const score=Math.max(directScore,relatedScore);return {career:c,score,type:directScore>=relatedScore?'ตรงกับ':'ใกล้เคียงกับ'}}).filter(x=>x.score>0).sort((a,b)=>b.score-a.score||a.career.id-b.career.id).slice(0,3);return {occupation,index,matches}})}
 function renderCareerMatches(occupations){const groups=findCareerMatches(occupations);return `<div class="career-match-panel"><h3>จากอาชีพที่กรอก ตรงกับอาชีพไหนบ้าง</h3><p>ระบบเทียบชื่ออาชีพและคำสำคัญกับรายการอาชีพใน Career Explorer ให้ดูเป็นคู่ตามอันดับที่กรอก</p>${groups.map(group=>`<div class="career-match-group"><strong>อาชีพที่ ${group.index+1}: ${escapeHtml(group.occupation)}</strong><div class="career-match-list">${group.matches.length?group.matches.map(match=>`<span class="career-match-tag ${match.type==='ตรงกับ'?'direct':''}"><small>${match.type}</small>${match.career.icon} ${match.career.name}</span>`).join(''):'<span class="career-match-empty">ยังไม่พบอาชีพที่ตรงหรือใกล้เคียงในรายการ</span>'}</div></div>`).join('')}</div>`}
 function renderCodes(){ $('#codeCards').innerHTML=Object.entries(codes).map(([letter,c])=>`<button class="code-card code-${letter}" data-code="${letter}"><span class="code-letter">${letter}</span><strong>${c.name}</strong><small>${c.short}</small></button>`).join(''); document.querySelectorAll('.code-card').forEach(b=>b.onclick=()=>showCode(b.dataset.code)); }
 function showCode(letter){const c=codes[letter]; $('#dialogContent').innerHTML=`<p class="detail-code">${letter}</p><h2 class="detail-title">${c.name}<br><small>${c.thai}</small></h2><p class="detail-text">${c.description}</p><h3>จุดแข็งที่มักพบ</h3><ul class="detail-list">${c.strengths.map(x=>`<li>${x}</li>`).join('')}</ul><div class="detail-callout"><strong>สภาพแวดล้อมที่เหมาะ:</strong> ${c.environment}</div>`; $('#detailDialog').showModal();}
