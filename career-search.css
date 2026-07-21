@@ -1,0 +1,6 @@
+.career-search{display:flex;align-items:center;gap:12px;margin-top:34px;max-width:520px}
+.career-search label{font-size:13px;font-weight:700;color:var(--ink);white-space:nowrap}
+.career-search input{width:100%;border:1px solid #d8dad4;border-radius:12px;background:var(--white);padding:11px 14px;color:var(--ink);font:inherit;font-size:13px;outline:none}
+.career-search input:focus{border-color:var(--teal);box-shadow:0 0 0 3px #067d7518}
+.career-empty{grid-column:1 / -1;margin:0;padding:22px;border:1px dashed #d8dad4;border-radius:14px;color:var(--muted);font-size:13px;text-align:center}
+@media(max-width:760px){.career-search{display:block;margin-top:28px}.career-search label{display:block;margin-bottom:8px}.career-search input{width:100%}}
