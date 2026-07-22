@@ -10,7 +10,7 @@ const STUDENT_META_START_COLUMN = 232;
 const OCCUPATION_START_COLUMN = 235;
 const OCCUPATION_HEADERS = ['อาชีพที่ 1 (ล่าสุด)', 'อาชีพที่ 2', 'อาชีพที่ 3', 'อาชีพที่ 4', 'อาชีพที่ 5 (เก่าที่สุด)'];
 const MATCH_START_COLUMN = 240;
-const MATCH_HEADERS = ['อาชีพที่ 1 พบอาชีพในระบบ', 'อาชีพที่ 2 พบอาชีพในระบบ', 'อาชีพที่ 3 พบอาชีพในระบบ', 'อาชีพที่ 4 พบอาชีพในระบบ', 'อาชีพที่ 5 พบอาชีพในระบบ'];
+const MATCH_HEADERS = ['อาชีพที่ 1 สอดคล้องกับความสามารถ', 'อาชีพที่ 2 สอดคล้องกับความสามารถ', 'อาชีพที่ 3 สอดคล้องกับความสามารถ', 'อาชีพที่ 4 สอดคล้องกับความสามารถ', 'อาชีพที่ 5 สอดคล้องกับความสามารถ'];
 const RIASEC_CODES = ['R', 'I', 'A', 'S', 'E', 'C'];
 const TIE_BREAK_SECTIONS = ['occupations', 'competencies', 'activities', 'selfEstimates'];
 const SUMMARY_HEADERS = ['R', 'I', 'A', 'S', 'E', 'C', 'Holland Code', 'บุคลิกภาพเด่น'];
@@ -141,19 +141,16 @@ function ensureMatchHeaders_(sheet) {
   const requiredColumns = MATCH_START_COLUMN + MATCH_HEADERS.length - 1;
   if (sheet.getMaxColumns() < requiredColumns) sheet.insertColumnsAfter(sheet.getMaxColumns(), requiredColumns - sheet.getMaxColumns());
   const headers = sheet.getRange(ANSWERS_HEADER_ROW, MATCH_START_COLUMN, 1, MATCH_HEADERS.length).getDisplayValues()[0];
-  if (headers.some(function (value) { return value === ''; })) sheet.getRange(ANSWERS_HEADER_ROW, MATCH_START_COLUMN, 1, MATCH_HEADERS.length).setValues([MATCH_HEADERS]);
+  if (headers.some(function (value, index) { return value !== MATCH_HEADERS[index]; })) sheet.getRange(ANSWERS_HEADER_ROW, MATCH_START_COLUMN, 1, MATCH_HEADERS.length).setValues([MATCH_HEADERS]);
 }
 
 function occupationMatchValues_(groups) {
   return MATCH_HEADERS.map(function (_, index) {
     const group = Array.isArray(groups) ? groups[index] : null;
-    const matches = group && Array.isArray(group.matches) ? group.matches : [];
-    if (!matches.length) return 'ไม่พบอาชีพที่ตรงหรือใกล้เคียง';
-    return matches.map(function (match) {
-      const name = String((match && match.name) || '').trim();
-      const type = String((match && match.type) || 'ใกล้เคียงกับ').trim();
-      return name ? type + ': ' + name : '';
-    }).filter(Boolean).join(' | ');
+    if (!group) return 'ยังไม่มีผลประเมิน';
+    const label = String(group.label || 'ยังประเมินไม่ได้').trim();
+    const detail = String(group.detail || '').trim();
+    return detail ? label + ': ' + detail : label;
   });
 }
 
