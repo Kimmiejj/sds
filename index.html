@@ -58,10 +58,13 @@
 
     <section id="careers" class="section career-section">
       <div class="section-heading row-heading"><div><p class="eyebrow">CAREER EXPLORER</p><h2>สงสัยอาชีพไหน<br>ลองค้นหาได้เลย</h2></div><p>พิมพ์ชื่ออาชีพเพื่อดูคำอธิบายแบบเข้าใจง่าย ลักษณะงาน เส้นทางการเรียน และทักษะที่ควรเริ่มฝึก</p></div>
-      <form class="career-search" id="careerGuideForm"><label for="careerSearch">อยากรู้อาชีพอะไร?</label><div class="career-search-row"><input id="careerSearch" type="search" placeholder="เช่น หมอ โปรแกรมเมอร์ หรือ สถาปนิก" autocomplete="off" list="careerGuideNames" /><button type="submit">ค้นหา <span>→</span></button></div><datalist id="careerGuideNames"></datalist></form>
+      <form class="career-search" id="careerGuideForm"><label for="careerGuideSearch">อยากรู้อาชีพอะไร?</label><div class="career-search-row"><input id="careerGuideSearch" type="search" placeholder="เช่น หมอ โปรแกรมเมอร์ หรือ สถาปนิก" autocomplete="off" list="careerGuideNames" /><button type="submit">ค้นหา <span>→</span></button></div><datalist id="careerGuideNames"></datalist></form>
+      <p class="career-source-summary" id="careerSourceSummary"></p>
       <div class="career-suggestions" id="careerSuggestions" aria-label="อาชีพที่แนะนำ"></div>
       <div class="career-guide-result" id="careerGuideResult" aria-live="polite"></div>
-      <div class="career-directory-heading"><h3>สำรวจรายชื่ออาชีพตามรหัส RIASEC</h3><p>กรองรายการอาชีพจากเอกสารของจอห์น แอล ฮอลแลนด์</p></div><div class="filters" id="careerFilters"></div><div class="career-grid" id="careerGrid"></div>
+      <div class="career-directory-heading"><h3>สำรวจรายชื่ออาชีพตามรหัส RIASEC</h3><p>กรองรายการอาชีพจากเอกสารของจอห์น แอล ฮอลแลนด์</p></div>
+      <div class="career-search riasec-search"><label for="careerSearch">ค้นหารหัสหรือชื่ออาชีพตาม RIASEC</label><input id="careerSearch" type="search" placeholder="เช่น RIA หรือ สถาปนิก" autocomplete="off" /></div>
+      <div class="filters" id="careerFilters"></div><div class="career-grid" id="careerGrid"></div>
     </section>
 
     <section id="links" class="section link-section">
@@ -75,6 +78,7 @@
   <dialog id="detailDialog"><button class="dialog-close" id="closeDialog" aria-label="ปิด">×</button><div id="dialogContent"></div></dialog>
   <script src="config.js"></script>
   <script src="occupations-data.js"></script>
+  <script src="thai-occupations-data.js"></script>
   <script src="career-guide-data.js"></script>
   <script src="app.js"></script>
 </body>
