@@ -3,7 +3,7 @@ import vm from 'node:vm';
 
 const source = await fs.readFile('app.js', 'utf8');
 const start = source.indexOf('const riasecOrder=');
-const end = source.indexOf('function findCareerMatches');
+const end = source.indexOf('function renderOccupationFits');
 const context = { codes: { R:{}, I:{}, A:{}, S:{}, E:{}, C:{} } };
 vm.runInNewContext(source.slice(start, end), context);
 const { calculateRiasecResult } = context;
